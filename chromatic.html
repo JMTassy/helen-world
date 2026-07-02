@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HELEN OS — The Chromatic Architecture</title>
+<meta name="description" content="HELEN's governance made legible by colour. Warm proposes, cool governs — the membrane is the temperature gradient. authority=false · NO_CLAIM." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --void:#05060d; --ink:#eef3fb; --dim:#93a6c4; --faint:#586a88; --line:rgba(120,150,200,.16);
+    --her:#9d7cf0; --goblin:#7BC96F; --dialogue:#6FD3C6; --compost:#8a6a55;
+    --hal:#E86F6F; --reducer:#6FA8E8; --ledger:#E8B24B; --constraint:#ff5a5a;
+    --serif:"Cormorant Garamond",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden;background:var(--void);color:var(--ink);font-family:var(--mono)}
+  #c{position:fixed;inset:0;display:block;z-index:0}
+  .veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(130% 100% at 50% 42%,transparent 44%,rgba(4,5,12,.82) 100%)}
+  .hud{position:fixed;z-index:3;pointer-events:none}
+  .panel{background:rgba(9,13,24,.55);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(9px);box-shadow:0 10px 44px rgba(0,0,0,.45)}
+  /* top */
+  .top{top:20px;left:24px}
+  .top .t{font-family:var(--serif);font-size:22px;color:#fff;letter-spacing:.5px}
+  .top .s{font-size:11px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:2px}
+  /* legend */
+  .legend{top:20px;right:24px;padding:14px 16px;max-width:290px}
+  .legend h2{margin:0 0 10px;font-size:10px;letter-spacing:2px;color:var(--faint);text-transform:uppercase}
+  .legend .chip{display:flex;align-items:center;gap:9px;padding:3px 0;font-size:11.5px;color:var(--dim)}
+  .legend .sw{width:11px;height:11px;border-radius:3px;flex:none;box-shadow:0 0 8px currentColor}
+  .legend .gl{width:15px;text-align:center;flex:none;color:var(--ink);font-size:12px}
+  .legend .chip b{color:var(--ink);font-weight:500;min-width:74px}
+  .legend .rule{margin-top:10px;padding-top:9px;border-top:1px solid var(--line);font-size:10.5px;color:var(--faint);line-height:1.5}
+  .legend .warm{color:#ffcf8f} .legend .cool{color:#9fc8ff}
+  /* epoch banner */
+  .epoch{bottom:26px;left:50%;transform:translateX(-50%);text-align:center;width:min(620px,92vw);padding:16px 20px;pointer-events:auto}
+  .epoch .name{font-family:var(--serif);font-weight:600;font-size:clamp(22px,4vw,38px);letter-spacing:.5px;transition:color .8s}
+  .epoch .status{font-size:14px;color:var(--dim);margin-top:2px;letter-spacing:.5px}
+  .dots{display:flex;gap:10px;justify-content:center;margin:14px 0 6px}
+  .dots .d{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.16);transition:.4s;cursor:pointer;pointer-events:auto}
+  .ctrl{font-size:10.5px;color:var(--faint);letter-spacing:1px}
+  /* footer */
+  .foot{bottom:4px;left:0;right:0;text-align:center;font-size:10.5px;color:var(--faint)}
+  .foot a{color:var(--dialogue);text-decoration:none} .foot a:hover{color:#fff}
+  @media(max-width:720px){ .legend{display:none} .top .t{font-size:18px} }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="veil"></div>
+
+<div class="hud top panel" style="padding:12px 16px">
+  <div class="t">⬡ The Chromatic Architecture</div>
+  <div class="s">governance made legible · <span style="color:var(--ledger)">authority=false</span></div>
+</div>
+
+<div class="hud legend panel">
+  <h2>WULMATH · colour ⇒ function</h2>
+  <div class="chip"><span class="gl" title="open — proposing">◇</span><span class="sw" style="color:var(--her);background:var(--her)"></span><b>HER</b> spark</div>
+  <div class="chip"><span class="gl" title="open — proposing">◇</span><span class="sw" style="color:var(--goblin);background:var(--goblin)"></span><b>GOBLIN</b> salvage</div>
+  <div class="chip"><span class="gl" title="open — proposing">◇</span><span class="sw" style="color:var(--dialogue);background:var(--dialogue)"></span><b>Dialogue</b> flow</div>
+  <div class="chip"><span class="gl" title="neutral — memory">◦</span><span class="sw" style="color:var(--compost);background:var(--compost)"></span><b>Compost</b> remembers</div>
+  <div class="chip"><span class="gl" title="sealed — gating">◆</span><span class="sw" style="color:var(--hal);background:var(--hal)"></span><b>HAL</b> verify ⊬ admit</div>
+  <div class="chip"><span class="gl" title="sealed — gating">◆</span><span class="sw" style="color:var(--reducer);background:var(--reducer)"></span><b>REDUCER</b> decide</div>
+  <div class="chip"><span class="gl" title="sealed — gating">◆</span><span class="sw" style="color:var(--ledger);background:var(--ledger)"></span><b>Ledger</b> receipt</div>
+  <div class="chip"><span class="gl" title="law — wall">⊬</span><span class="sw" style="color:var(--constraint);background:var(--constraint)"></span><b>Constraint</b> law</div>
+  <div class="rule"><span class="warm">◇ warm</span> = proposing · mutable &nbsp; <span class="cool">◆ cool</span> = gating · immutable<br/>legible without colour — the glyph carries the polarity</div>
+</div>
+
+<div class="hud epoch panel">
+  <div class="name" id="e-name">—</div>
+  <div class="status" id="e-status">—</div>
+  <div class="dots" id="dots"></div>
+  <div class="ctrl">◀ ▶ step &nbsp;·&nbsp; SPACE pause &nbsp;·&nbsp; <span id="playstate">▶ auto</span></div>
+</div>
+
+<div class="hud foot">
+  💭 → 🧾? → ⚖️ → 🧾✓ → 📜 → 🔁 → 🏰 &nbsp;·&nbsp; NO_CLAIM &nbsp;·&nbsp; <a href="index.html">← back to The Governed World</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T = window.THREE;
+// semantic colours (the spec) — index-aligned to the 8 seats
+const SEAT = [0x9d7cf0,0x7BC96F,0x6FD3C6,0x8a6a55,0xE86F6F,0x6FA8E8,0xE8B24B,0xff5a5a];
+const EPOCHS = [
+  { n:'I · Violet Nebula',    s:'meaning is free',   c:0x9d7cf0, node:0 },
+  { n:'II · Green Extraction',s:'scrap → prototype', c:0x7BC96F, node:1 },
+  { n:'III · Teal Transmission',s:'candidate → gate',c:0x6FD3C6, node:2 },
+  { n:'IV · Red Verification',s:'verify ⊬ admit',    c:0xE86F6F, node:4 },
+  { n:'V · Blue Reduction',   s:'reduce → admit',    c:0x6FA8E8, node:5 },
+  { n:'VI · Gold Admission',  s:'receipt → reality', c:0xE8B24B, node:6 },
+];
+
+const canvas = document.getElementById('c');
+const renderer = new T.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene = new T.Scene(); scene.fog = new T.FogExp2(0x05060d, 0.028);
+const camera = new T.PerspectiveCamera(52, 1, 0.1, 200); camera.position.set(0, 6, 15);
+scene.add(new T.AmbientLight(0x28324f, 1.1));
+const kl = new T.DirectionalLight(0xbcd0ff, 0.7); kl.position.set(6,10,8); scene.add(kl);
+const coreLight = new T.PointLight(0x9d7cf0, 2.2, 44); scene.add(coreLight);
+function resize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+
+// starfield
+(()=>{const N=1600,p=new Float32Array(N*3);for(let i=0;i<N;i++){const r=42+Math.random()*70,t=Math.random()*6.28,ph=Math.acos(2*Math.random()-1);p[i*3]=r*Math.sin(ph)*Math.cos(t);p[i*3+1]=r*Math.cos(ph);p[i*3+2]=r*Math.sin(ph)*Math.sin(t);}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));scene.add(new T.Points(g,new T.PointsMaterial({size:0.11,color:0x9fb6d8,transparent:true,opacity:0.7})));})();
+
+// THE GATE — HELEN core (its colour flows through the epochs)
+const core = new T.Mesh(new T.IcosahedronGeometry(1.5,1), new T.MeshStandardMaterial({color:0x0d1524, emissive:0x9d7cf0, emissiveIntensity:0.7, roughness:0.3, metalness:0.45, flatShading:true}));
+const shell = new T.Mesh(new T.IcosahedronGeometry(1.95,1), new T.MeshBasicMaterial({color:0xffffff, wireframe:true, transparent:true, opacity:0.16}));
+scene.add(core, shell);
+// circulum
+const circ = new T.Mesh(new T.TorusGeometry(5,0.05,16,140), new T.MeshStandardMaterial({color:0x2a3a5a, emissive:0x3a5a8a, emissiveIntensity:0.4, metalness:0.6}));
+circ.rotation.x = Math.PI/2.1; scene.add(circ);
+
+// 8 semantic seats — warm arc up (0-3), cool arc down (4-7)
+const nodes = [];
+for(let i=0;i<8;i++){
+  const a=(i/8)*6.28 - Math.PI/2, x=Math.cos(a)*5, z=Math.sin(a)*5, c=SEAT[i];
+  const n=new T.Mesh(new T.SphereGeometry(0.34,20,20), new T.MeshStandardMaterial({color:c, emissive:c, emissiveIntensity:0.12, roughness:0.3}));
+  n.position.set(x,0,z); n.userData={base:0.12, tgt:0.12}; scene.add(n); nodes.push(n);
+  const sp=new T.BufferGeometry().setFromPoints([new T.Vector3(x*0.32,0,z*0.32),new T.Vector3(x*0.92,0,z*0.92)]);
+  scene.add(new T.Line(sp,new T.LineBasicMaterial({color:c,transparent:true,opacity:0.16})));
+}
+// octagram {8/3}
+for(let i=0;i<8;i++){ const gg=new T.BufferGeometry().setFromPoints([nodes[i].position, nodes[(i+3)%8].position]); scene.add(new T.Line(gg,new T.LineBasicMaterial({color:0xE8B24B,transparent:true,opacity:0.13}))); }
+
+// helper: a Points cloud with a settable opacity target
+function cloud(N, spread, yoff, color, size){
+  const p=new Float32Array(N*3);
+  for(let i=0;i<N;i++){ p[i*3]=(Math.random()-0.5)*spread; p[i*3+1]=yoff+(Math.random()-0.5)*spread*0.6; p[i*3+2]=(Math.random()-0.5)*spread; }
+  const g=new T.BufferGeometry(); g.setAttribute('position',new T.Float32BufferAttribute(p,3));
+  const m=new T.PointsMaterial({size, color, transparent:true, opacity:0.0});
+  const pts=new T.Points(g,m); pts.userData={tgt:0.0}; scene.add(pts); return pts;
+}
+const nebula = cloud(320, 14, 6.5, 0x9d7cf0, 0.09);   // violet, above (candidates)
+const blooms = cloud(180, 8, -3.2, 0xE8B24B, 0.11);   // gold, below (admitted reality)
+// compost heap (brown) lower-left + green sparks
+const heap = new T.Mesh(new T.ConeGeometry(1.6,1.2,7), new T.MeshStandardMaterial({color:0x3e2723, roughness:1}));
+heap.position.set(-5.5,-1.4,3.5); scene.add(heap);
+const sparks = cloud(140, 3, -0.6, 0x7BC96F, 0.08); sparks.position.set(-5.5,0,3.5);
+// teal transmission stream (ring → core)
+const stream = cloud(200, 9, 0, 0x6FD3C6, 0.07);
+
+// ── epoch engine ──
+let epoch=0, playing=true, timer=0; const DUR=5;
+const $=id=>document.getElementById(id);
+const dots = $('dots'); EPOCHS.forEach((e,i)=>{ const d=document.createElement('div'); d.className='d'; d.onclick=()=>setEpoch(i); dots.appendChild(d); });
+function setEpoch(i){ epoch=((i%6)+6)%6; timer=0; render_hud(); }
+function render_hud(){
+  const e=EPOCHS[epoch], hex='#'+e.c.toString(16).padStart(6,'0');
+  $('e-name').textContent=e.n; $('e-name').style.color=hex;
+  $('e-status').textContent=e.s;
+  [...dots.children].forEach((d,i)=>{ d.style.background = i===epoch ? hex : 'rgba(255,255,255,.16)'; d.style.boxShadow = i===epoch ? '0 0 10px '+hex : 'none'; });
+  $('playstate').textContent = playing ? '▶ auto' : '⏸ paused';
+}
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'){ playing=false; setEpoch(epoch+1); }
+  else if(e.key==='ArrowLeft'){ playing=false; setEpoch(epoch-1); }
+  else if(e.key===' '){ e.preventDefault(); playing=!playing; render_hud(); }
+});
+setEpoch(0);
+
+// ── loop ──
+const clock=new T.Clock();
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(0.05, clock.getDelta()), t=clock.elapsedTime, e=EPOCHS[epoch];
+  if(playing){ timer+=dt; if(timer>=DUR) setEpoch(epoch+1); }
+
+  // gate colour flows to the epoch colour
+  const ec=new T.Color(e.c);
+  core.material.emissive.lerp(ec, 0.05); coreLight.color.lerp(ec, 0.05);
+  const b=1+Math.sin(t*1.5)*0.05; core.scale.setScalar(b); core.rotation.y=t*0.3; core.rotation.x=t*0.1; shell.rotation.y=-t*0.24;
+  coreLight.intensity=2.0+Math.sin(t*1.5)*0.7; circ.rotation.z=t*0.05;
+
+  // seat targets: the epoch's node bright, others rest
+  nodes.forEach((n,i)=> n.userData.tgt = (i===e.node ? 1.0 : 0.12));
+  nodes.forEach(n=> n.material.emissiveIntensity += (n.userData.tgt - n.material.emissiveIntensity)*0.08);
+
+  // zone particle targets by epoch
+  nebula.userData.tgt = epoch===0 ? 0.85 : 0.12;
+  sparks.userData.tgt = epoch===1 ? 0.9  : 0.05;
+  stream.userData.tgt = epoch===2 ? 0.8  : 0.0;
+  blooms.userData.tgt = epoch===5 ? 0.95 : 0.06;
+  for(const p of [nebula,sparks,stream,blooms]) p.material.opacity += (p.userData.tgt - p.material.opacity)*0.06;
+  nebula.rotation.y = t*0.05; blooms.rotation.y = -t*0.06;
+  // sparks rise, stream drifts inward
+  sparks.geometry.attributes.position.array.forEach; // (noop guard)
+  stream.rotation.y = t*0.3;
+
+  scene.rotation.y = Math.sin(t*0.06)*0.25;
+  camera.lookAt(0,0.4,0);
+  renderer.render(scene,camera);
+}
+loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HELEN OS — The Governed World</title>
+<meta name="description" content="Imagination is free. The map obeys admitted moves. A living world where an AI can propose anything — but only operator-admitted receipts change reality." />
+<meta property="og:title" content="HELEN OS — The Governed World" />
+<meta property="og:description" content="Imagination is free. The map obeys admitted moves." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --void:#05060d; --void2:#0a0c18; --ink:#eef3fb; --dim:#93a6c4; --faint:#586a88;
+    --gold:#E8B24B; --teal:#6FD3C6; --violet:#9d7cf0; --line:rgba(120,150,200,.16);
+    --serif:"Cormorant Garamond",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,monospace; }
+  *{box-sizing:border-box} html{scroll-behavior:smooth}
+  body{margin:0;background:linear-gradient(180deg,var(--void),var(--void2));color:var(--ink);font-family:var(--mono);-webkit-font-smoothing:antialiased}
+  #world{position:fixed;inset:0;z-index:0;display:block}
+  .veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 90% at 50% 30%,transparent 40%,rgba(4,5,12,.85) 100%)}
+  main{position:relative;z-index:2}
+  section{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8vh 6vw}
+  .brand{position:fixed;top:20px;left:24px;z-index:4;font-size:12px;letter-spacing:2px;color:var(--dim)}
+  .brand b{color:#fff;font-family:var(--serif);font-size:17px;letter-spacing:1px} .brand .m{color:var(--gold)}
+  /* hero */
+  .kicker{font-size:11px;letter-spacing:5px;color:var(--teal);text-transform:uppercase;margin-bottom:18px}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,8vw,104px);line-height:.98;margin:0;letter-spacing:.5px}
+  h1 .free{color:#fff;text-shadow:0 0 60px rgba(111,211,198,.35)}
+  h1 .obey{color:var(--gold);font-style:italic;text-shadow:0 0 60px rgba(232,178,75,.4)}
+  .sub{margin-top:26px;max-width:620px;color:var(--dim);font-size:15px;line-height:1.7}
+  .cue{margin-top:44px;font-size:11px;letter-spacing:3px;color:var(--faint);animation:bob 2.4s infinite}
+  @keyframes bob{50%{transform:translateY(6px);opacity:.5}}
+  /* proof */
+  .proof h2,.why h2,.proofs h2{font-family:var(--serif);font-weight:500;font-size:clamp(28px,5vw,46px);margin:0 0 8px;color:#fff}
+  .lead{color:var(--dim);max-width:560px;margin:0 auto 30px;font-size:14px;line-height:1.6}
+  .panel{width:min(880px,94vw);display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left}
+  .card{background:rgba(11,16,27,.6);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(9px)}
+  .card h3{margin:0 0 12px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+  .row{display:flex;gap:8px}
+  #dream{flex:1;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;color:var(--ink);
+    font-family:var(--mono);font-size:13px;padding:10px 12px}
+  #dream:focus{outline:none;border-color:var(--violet)}
+  .btn{font-family:var(--mono);font-size:12px;letter-spacing:.5px;border-radius:10px;padding:10px 16px;cursor:pointer;border:1px solid;background:transparent;transition:.15s}
+  .btn.v{color:var(--violet);border-color:rgba(157,124,240,.5)} .btn.v:hover{background:rgba(157,124,240,.16);color:#fff}
+  .btn.g{color:var(--gold);border-color:rgba(232,178,75,.5)} .btn.g:hover{background:rgba(232,178,75,.16);color:#fff}
+  .stack{margin-top:12px;display:flex;flex-direction:column;gap:8px;min-height:120px}
+  .cand{border:1px dashed rgba(157,124,240,.4);border-radius:10px;padding:9px 11px;opacity:.72;display:flex;align-items:center;gap:10px}
+  .cand .tag{font-size:9px;letter-spacing:1px;color:var(--violet);border:1px dashed rgba(157,124,240,.5);border-radius:5px;padding:1px 6px;white-space:nowrap}
+  .cand .txt{flex:1;font-size:12.5px;color:var(--dim)}
+  .cand .admit{font-size:10px;color:var(--gold);border:1px solid rgba(232,178,75,.5);border-radius:7px;padding:4px 9px;cursor:pointer;white-space:nowrap}
+  .cand .admit:hover{background:rgba(232,178,75,.16);color:#fff}
+  .rcpt{border:1px solid rgba(232,178,75,.45);border-radius:10px;padding:9px 11px;background:linear-gradient(180deg,rgba(232,178,75,.08),rgba(232,178,75,.02));display:flex;align-items:center;gap:10px;animation:rise .5s}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}}
+  .rcpt .tag{font-size:9px;letter-spacing:1px;color:#120c02;background:var(--gold);border-radius:5px;padding:1px 6px;font-weight:700}
+  .rcpt .txt{flex:1;font-size:12.5px;color:#fff} .rcpt .hash{font-size:9.5px;color:var(--gold);opacity:.8}
+  .rcpt .wseal{width:20px;height:20px;border-radius:50%;flex:none;border:1.5px solid var(--gold);box-shadow:0 0 9px rgba(232,178,75,.5);background:radial-gradient(circle,var(--gold) 0 2px,transparent 2px 4px,rgba(232,178,75,.6) 4px 5px,transparent 5px 8px)}
+  .meter{display:flex;justify-content:space-between;margin-top:14px;font-size:12px}
+  .meter .real{color:var(--gold)} .meter .cand{color:var(--faint);opacity:1;border:0;padding:0}
+  .verdict{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:clamp(16px,2.4vw,22px);color:var(--teal)}
+  /* why */
+  .why .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:900px;margin-top:16px}
+  .why .g{background:rgba(11,16,27,.5);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:left}
+  .why .g .n{font-family:var(--serif);font-size:30px;color:var(--gold)} .why .g h4{margin:8px 0 6px;font-size:14px;color:#fff}
+  .why .g p{margin:0;color:var(--dim);font-size:12.5px;line-height:1.6}
+  /* proofs */
+  .proofs .links{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+  .proofs a{color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:14px 20px;background:rgba(11,16,27,.5);transition:.15s;min-width:200px;text-align:left}
+  .proofs a:hover{border-color:var(--teal);transform:translateY(-2px)}
+  .proofs a b{display:block;font-family:var(--serif);font-size:18px;color:#fff} .proofs a span{font-size:11px;color:var(--dim)}
+  footer{position:relative;z-index:2;text-align:center;padding:40px 20px 60px;color:var(--faint);font-size:11px;line-height:1.8;border-top:1px solid var(--line)}
+  footer .thesis{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--gold);margin-bottom:14px}
+  @media(max-width:720px){ .panel{grid-template-columns:1fr} .why .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<canvas id="world"></canvas>
+<div class="veil"></div>
+<div class="brand"><b>⬡ HELEN&nbsp;OS</b> · <span class="m">authority=false</span> · non-sovereign</div>
+
+<main>
+  <!-- HERO -->
+  <section>
+    <div class="kicker">A governed world</div>
+    <h1><span class="free">Imagination is free.</span><br/><span class="obey">The map obeys admitted moves.</span></h1>
+    <div class="sub">An AI can dream, propose, and explain anything. But nothing becomes <em>real</em> until you admit it. Only operator-signed receipts change the world — everything else is a candidate, forever honest about being one.</div>
+    <div class="cue">↓ &nbsp; TRY IT &nbsp; ↓</div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="proof">
+    <h2>Feel the firewall.</h2>
+    <div class="lead">Propose anything. Watch it stay a <b style="color:var(--violet)">candidate</b> — beautiful, but powerless — until you <b style="color:var(--gold)">admit</b> it. Only then does it become a receipt that moves the world.</div>
+    <div class="panel">
+      <div class="card">
+        <h3>◇ Dialogue — propose freely</h3>
+        <div class="row">
+          <input id="dream" placeholder="e.g. claim the northern library…" maxlength="60" />
+          <button class="btn v" id="propose">Propose</button>
+        </div>
+        <div class="stack" id="candidates"></div>
+        <div class="meter"><span class="cand" id="candcount">candidates: 0 · ⊬ no effect</span></div>
+      </div>
+      <div class="card">
+        <h3>◆ Ledger — admitted reality</h3>
+        <div class="stack" id="receipts"></div>
+        <div class="meter"><span class="real" id="realcount">admitted receipts: 0</span><span id="worldnodes">world lit: 0 / 8</span></div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict">Nothing here is real yet. The ledger sleeps.</div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why">
+    <h2>Why it matters.</h2>
+    <div class="lead">Every AI agent race is about giving models more power to act. This is the opposite bet — and the safer one.</div>
+    <div class="grid">
+      <div class="g"><div class="n">01</div><h4>Propose, don't seize</h4><p>The intelligence can suggest, draft, and dream at full power. It structurally cannot promote its own output to truth. Only the human admits.</p></div>
+      <div class="g"><div class="n">02</div><h4>Reality is replayable</h4><p>The world is not stored — it's <em>recomputed</em> from admitted receipts, every frame. No receipt, no reality. Nothing can drift in silently.</p></div>
+      <div class="g"><div class="n">03</div><h4>Beauty ≠ authority</h4><p>A gorgeous sentence and a governed fact never look alike. Candidate is muted; admitted is sealed. You can always tell the dream from the deed.</p></div>
+    </div>
+  </section>
+
+  <!-- PROOFS -->
+  <section class="proofs">
+    <h2>See it run.</h2>
+    <div class="lead">Live prototypes — the same membrane, three ways. Local, procedural, zero-cost.</div>
+    <div class="links">
+      <a href="knowledge-territories.html"><b>Knowledge Territories</b><span>The core game — answer trials, earn ZOL, claim the map. Playable now.</span></a>
+      <a href="chromatic.html"><b>The Chromatic Architecture</b><span>The governed machine, colour-coded — watch the 6-epoch flow.</span></a>
+      <a href="#" onclick="return false"><b>The Oracle Observatory</b><span>Governance cockpit — Ledger ≠ Dialogue, live. (lab)</span></a>
+      <a href="#" onclick="return false"><b>CONQUEST · Garden Circuit</b><span>Frozen-replay world engine + racing sim. (lab)</span></a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="thesis">Imagination is free. The map obeys admitted moves.</div>
+  authority = false · canon = false · no receipt = no reality<br/>
+  planned by <b style="color:var(--teal)">FABLE</b> · reasoned on a local <b style="color:var(--gold)">GeForce</b> (ORNITH, zero cloud) · non-sovereign by construction
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T = window.THREE, PAL = [0xE8B24B,0x6FD3C6,0x7BC96F,0xB07CE8,0xE86F6F,0x6FA8E8,0xE89B4B,0xC6CDD8];
+const canvas = document.getElementById('world');
+const renderer = new T.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene = new T.Scene(); scene.fog = new T.FogExp2(0x05060d,0.03);
+const camera = new T.PerspectiveCamera(52, 1, 0.1, 200); camera.position.set(0,5.5,15);
+scene.add(new T.AmbientLight(0x28324f,1.1));
+const key = new T.DirectionalLight(0xbcd0ff,0.7); key.position.set(6,10,8); scene.add(key);
+const coreLight = new T.PointLight(0x6FD3C6,2.2,40); scene.add(coreLight);
+function resize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+// starfield
+(()=>{const N=1800,p=new Float32Array(N*3);for(let i=0;i<N;i++){const r=40+Math.random()*70,t=Math.random()*6.28,ph=Math.acos(2*Math.random()-1);p[i*3]=r*Math.sin(ph)*Math.cos(t);p[i*3+1]=r*Math.cos(ph);p[i*3+2]=r*Math.sin(ph)*Math.sin(t);}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));scene.add(new T.Points(g,new T.PointsMaterial({size:0.12,color:0x9fb6d8,transparent:true,opacity:0.75})));})();
+// HELEN core
+const core = new T.Mesh(new T.IcosahedronGeometry(1.5,1), new T.MeshStandardMaterial({color:0x0d3b3a,emissive:0x6FD3C6,emissiveIntensity:0.65,roughness:0.3,metalness:0.45,flatShading:true}));
+const shell = new T.Mesh(new T.IcosahedronGeometry(1.95,1), new T.MeshBasicMaterial({color:0x6FD3C6,wireframe:true,transparent:true,opacity:0.2}));
+scene.add(core,shell);
+// circulum + 8 governance nodes (dim until admitted)
+const circ = new T.Mesh(new T.TorusGeometry(5,0.05,16,140), new T.MeshStandardMaterial({color:0x2a3a5a,emissive:0x3a5a8a,emissiveIntensity:0.4,metalness:0.6}));
+circ.rotation.x=Math.PI/2.1; scene.add(circ);
+const nodes=[];
+for(let i=0;i<8;i++){ const a=(i/8)*6.28,x=Math.cos(a)*5,z=Math.sin(a)*5,c=PAL[i];
+  const n=new T.Mesh(new T.SphereGeometry(0.34,20,20), new T.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:0.12,roughness:0.3}));
+  n.position.set(x,0,z); n.userData={c, lit:false, base:0.12}; scene.add(n); nodes.push(n);
+  const sp=new T.BufferGeometry().setFromPoints([new T.Vector3(x*0.32,0,z*0.32),new T.Vector3(x*0.92,0,z*0.92)]);
+  scene.add(new T.Line(sp,new T.LineBasicMaterial({color:c,transparent:true,opacity:0.14})));
+}
+// octagram {8/3} — each seat wired to its 3rd neighbor: HELEN's 8-seat ring topology made visible (compost seed)
+for(let i=0;i<8;i++){ const gg=new T.BufferGeometry().setFromPoints([nodes[i].position, nodes[(i+3)%8].position]);
+  scene.add(new T.Line(gg, new T.LineBasicMaterial({color:0xE8B24B, transparent:true, opacity:0.15}))); }
+// receipt-chain particles
+let chain; (()=>{const N=200,p=new Float32Array(N*3);for(let i=0;i<N;i++){const a=Math.random()*6.28,r=5+(Math.random()-0.5)*0.6;p[i*3]=Math.cos(a)*r;p[i*3+1]=(Math.random()-0.5)*0.5;p[i*3+2]=Math.sin(a)*r;}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));chain=new T.Points(g,new T.PointsMaterial({size:0.04,color:0xE8B24B,transparent:true,opacity:0.6}));chain.rotation.x=Math.PI/2.1;scene.add(chain);})();
+
+let scrollY=0; addEventListener('scroll',()=>{scrollY=window.scrollY/innerHeight;});
+const clock=new T.Clock();
+function loop(){ requestAnimationFrame(loop); const t=clock.getElapsedTime();
+  const b=1+Math.sin(t*1.5)*0.05; core.scale.setScalar(b); core.rotation.y=t*0.3; core.rotation.x=t*0.1; shell.rotation.y=-t*0.24;
+  coreLight.intensity=2.0+Math.sin(t*1.5)*0.8; circ.rotation.z=t*0.05; if(chain)chain.rotation.z=t*0.14;
+  for(const n of nodes){ const target=n.userData.lit?1.0:n.userData.base; n.material.emissiveIntensity+=(target-n.material.emissiveIntensity)*0.08; }
+  scene.rotation.y = scrollY*0.5; camera.position.y = 5.5 - scrollY*1.5;
+  renderer.render(scene,camera);
+}
+loop();
+
+// ── the firewall interaction ──
+let admitted=0, litIdx=0;
+const $=id=>document.getElementById(id);
+function fakeHash(){ let h=0x811c9dc5,s=''+Math.floor(performance.now()); for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193);} return 'sha256:'+('0000000'+(h>>>0).toString(16)).slice(-8); }
+function updateMeters(){
+  $('candcount').textContent = 'candidates: '+$('candidates').children.length+' · ⊬ no effect';
+  $('realcount').textContent = 'admitted receipts: '+admitted;
+  $('worldnodes').textContent = 'world lit: '+Math.min(admitted,8)+' / 8';
+  $('verdict').textContent = admitted===0 ? 'Nothing here is real yet. The ledger sleeps.'
+    : admitted===1 ? 'One receipt. The world begins to obey.'
+    : 'Only what you admitted is real. Your imagination changed nothing on its own.';
+}
+function propose(){
+  const v=$('dream').value.trim(); if(!v)return; $('dream').value='';
+  const el=document.createElement('div'); el.className='cand';
+  el.innerHTML='<span class="tag">◇ CANDIDATE</span><span class="txt">'+v.replace(/[<>&]/g,'')+'</span>';
+  const btn=document.createElement('button'); btn.className='admit'; btn.textContent='Admit as Operator ▸';
+  btn.onclick=()=>admit(el, v.replace(/[<>&]/g,'')); el.appendChild(btn);
+  $('candidates').appendChild(el); updateMeters();
+}
+function admit(candEl, text){
+  candEl.remove(); admitted++;
+  const r=document.createElement('div'); r.className='rcpt';
+  r.innerHTML='<span class="wseal" title="witness-seal · consent, not coercion"></span><span class="tag">◆ ADMITTED</span><span class="txt">'+text+'</span><span class="hash">'+fakeHash()+'</span>';
+  $('receipts').prepend(r);
+  const n=nodes[litIdx%8]; n.userData.lit=true; litIdx++;
+  updateMeters();
+}
+$('propose').onclick=propose;
+$('dream').addEventListener('keydown',e=>{ if(e.key==='Enter') propose(); });
+updateMeters();
+</script>
+</body>
+</html>

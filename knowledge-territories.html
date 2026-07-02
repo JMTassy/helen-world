@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dream of Conquest — Knowledge Territories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{ --void:#06070f; --gold:#e8b24b; --navy:#1a2a5c; --teal:#6fd3c6; --ink:#f0e4c4; --dim:#9fb0c8;
+    --green:#6fd08a; --red:#e86f6f; --parch:rgba(232,217,181,.08); --line:rgba(201,152,46,.3);
+    --serif:"Cinzel",Georgia,serif; --mono:"IBM Plex Mono",monospace; }
+  *{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden;background:var(--void);color:var(--ink);font-family:var(--mono)}
+  #map{position:fixed;inset:0;display:block}
+  .panel{position:fixed;z-index:3;background:linear-gradient(180deg,var(--parch),rgba(232,217,181,.03));
+    border:1px solid var(--line);border-radius:12px;padding:12px 15px;backdrop-filter:blur(7px);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  h1,h2,h3{font-family:var(--serif);margin:0}
+  /* wallet */
+  #wallet{top:16px;left:16px;min-width:210px}
+  #wallet h1{font-size:16px;color:var(--gold);letter-spacing:1px}
+  #wallet .sub{font-size:10px;color:var(--dim);margin:2px 0 8px}
+  #wallet .row{display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid rgba(201,152,46,.15);font-size:13px}
+  #wallet .row b{color:#fff} #wallet .zol{color:var(--gold);font-weight:700;font-size:16px}
+  #wallet .goal{margin-top:8px;font-size:10px;color:var(--dim)}
+  /* territory info */
+  #terr{top:16px;right:16px;width:min(280px,44vw);display:none}
+  #terr.show{display:block}
+  #terr h3{font-size:17px;color:var(--gold)}
+  #terr .meta{font-size:11px;color:var(--dim);margin:4px 0 10px}
+  #terr .stat{display:flex;justify-content:space-between;font-size:12px;padding:2px 0} #terr .stat b{color:#fff}
+  #terr .btns{margin-top:12px;display:flex;flex-direction:column;gap:7px}
+  .btn{font-family:var(--mono);font-size:12px;border-radius:9px;padding:9px 12px;cursor:pointer;border:1px solid;background:transparent;transition:.15s;text-align:center}
+  .btn.gold{color:var(--gold);border-color:rgba(232,178,75,.5)} .btn.gold:hover{background:rgba(232,178,75,.16);color:#fff}
+  .btn.teal{color:var(--teal);border-color:rgba(111,211,198,.5)} .btn.teal:hover{background:rgba(111,211,198,.16);color:#fff}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  #terr .owned{color:var(--green);font-weight:700;text-align:center;margin-top:8px}
+  /* ledger */
+  #ledger{bottom:16px;left:16px;width:min(300px,46vw);max-height:34vh;display:flex;flex-direction:column}
+  #ledger h3{font-size:13px;color:var(--gold);border-bottom:1px solid rgba(201,152,46,.25);padding-bottom:5px;margin-bottom:6px}
+  #llist{overflow-y:auto;font-size:10.5px}
+  .ev{padding:2px 0;color:var(--dim)} .ev b{color:var(--ink)}
+  .ev.win{color:var(--green)} .ev.miss{color:var(--red)}
+  /* QCM */
+  #qcm{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;background:rgba(6,7,15,.72);backdrop-filter:blur(5px);padding:20px}
+  #qcm.show{display:flex}
+  .quiz{width:min(560px,94vw);text-align:center}
+  .quiz .cat{font-size:10px;letter-spacing:2px;color:var(--teal);text-transform:uppercase}
+  .quiz .q{font-family:var(--serif);font-size:clamp(18px,3vw,26px);color:#fff;margin:8px 0 18px;line-height:1.3}
+  .quiz .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .quiz .opt{font-family:var(--mono);font-size:13px;color:var(--ink);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;transition:.12s;text-align:left}
+  .quiz .opt:hover{background:rgba(232,178,75,.14);border-color:var(--gold)}
+  .quiz .opt.correct{border-color:var(--green);color:var(--green);background:rgba(111,208,138,.12)}
+  .quiz .opt.wrong{border-color:var(--red);color:var(--red);background:rgba(232,111,111,.12)}
+  .quiz .fb{margin-top:14px;font-size:14px;min-height:22px}
+  .quiz .cont{margin-top:8px;display:none}
+  /* screens */
+  .screen{position:fixed;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:radial-gradient(circle at 50% 40%,rgba(26,42,92,.5),rgba(6,7,15,.94));padding:24px}
+  .screen h1{font-size:min(7vw,52px);color:var(--gold);letter-spacing:2px;margin:0;text-shadow:0 0 40px rgba(232,178,75,.5)}
+  .screen .sub{color:var(--dim);max-width:560px;margin:14px 0;font-size:14px;line-height:1.6}
+  .screen .cta{margin-top:20px;font-size:15px;color:#06070f;background:linear-gradient(180deg,var(--gold),#cf9528);padding:12px 30px;border-radius:10px;font-weight:700;letter-spacing:1px;cursor:pointer;border:0;font-family:var(--mono)}
+  #victory{display:none}
+  .memline{position:fixed;bottom:5px;left:0;right:0;text-align:center;font-size:10px;color:#6b6142;z-index:2;font-style:italic}
+  .home{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:4;font-size:11px;color:var(--dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+</style>
+</head>
+<body>
+<canvas id="map"></canvas>
+<a class="home" href="index.html">⬡ HELEN OS · The Governed World</a>
+
+<div class="panel" id="wallet">
+  <h1>🏰 House JM · Semper Fidelis</h1>
+  <div class="sub">Knowledge becomes power.</div>
+  <div class="row"><span>ZOL wallet</span><b class="zol" id="zol">0</b></div>
+  <div class="row"><span>Reputation</span><b id="rep">0</b></div>
+  <div class="row"><span>Territories</span><b id="owned">0 / 10</b></div>
+  <div class="goal" id="goal">Claim 7 territories — or reach 35 reputation — to win.</div>
+</div>
+
+<div class="panel" id="terr">
+  <h3 id="t-name">—</h3>
+  <div class="meta" id="t-cat">Select a glowing territory on the map.</div>
+  <div class="stat"><span>Price</span><b id="t-price">—</b></div>
+  <div class="stat"><span>Prestige</span><b id="t-prestige">—</b></div>
+  <div class="btns">
+    <button class="btn teal" id="answer">⚔ Answer a Trial &nbsp;(+ZOL)</button>
+    <button class="btn gold" id="claim">🏰 Claim territory</button>
+  </div>
+  <div class="owned" id="t-owned" style="display:none">◆ CLAIMED · Semper Fidelis</div>
+</div>
+
+<div class="panel" id="ledger">
+  <h3>📜 Local ledger</h3>
+  <div id="llist"></div>
+</div>
+
+<div id="qcm">
+  <div class="quiz panel" style="border-color:var(--gold)">
+    <div class="cat" id="q-cat">HISTORY</div>
+    <div class="q" id="q-text">—</div>
+    <div class="opts" id="q-opts"></div>
+    <div class="fb" id="q-fb"></div>
+    <button class="btn gold cont" id="q-cont">Continue ▸</button>
+  </div>
+</div>
+
+<div class="screen" id="start">
+  <h1>DREAM OF CONQUEST</h1>
+  <div class="sub" style="font-family:var(--serif);font-size:18px;color:var(--ink)">— Knowledge Territories —</div>
+  <div class="sub">Answer trials of history, science, culture, geography, and literature to earn <b style="color:var(--gold)">ZOL</b>.
+    Spend ZOL to claim territories around the Kernel Castle. Knowledge becomes power. Memory becomes identity.</div>
+  <button class="cta" id="start-btn">Begin the Conquest</button>
+</div>
+
+<div class="screen" id="victory">
+  <h1>👑 THE GARDEN IS YOURS</h1>
+  <div class="sub" id="v-msg"></div>
+  <button class="cta" id="restart-btn">Conquer Again</button>
+</div>
+
+<div class="memline">Knowledge becomes power. Memory becomes identity. · authority=false · ZOL is a local game token, no value.</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const T = window.THREE;
+const WIN_TERR = 7, WIN_REP = 35, REWARD = 22, PENALTY = 4;
+const TERRITORIES = [
+  { name:'The Library', price:35, prestige:3 }, { name:'Ember Reach', price:55, prestige:4 },
+  { name:'Silver Fens', price:45, prestige:3 }, { name:'Oracle Spire', price:90, prestige:6 },
+  { name:'Thornmarch', price:50, prestige:4 }, { name:'Gilded Delta', price:70, prestige:5 },
+  { name:'Whisperwood', price:40, prestige:3 }, { name:'Storm Bastion', price:100, prestige:7 },
+  { name:'Sunken Vault', price:80, prestige:5 }, { name:'Dawn Citadel', price:120, prestige:8 },
+];
+const QUESTIONS = [
+  { c:'HISTORY', q:'Which ancient wonder stood at Ephesus?', o:['Colossus of Rhodes','Temple of Artemis','Hanging Gardens','The Lighthouse'], a:1 },
+  { c:'SCIENCE', q:'The chemical symbol "Au" stands for?', o:['Silver','Gold','Iron','Aluminium'], a:1 },
+  { c:'GEOGRAPHY', q:'Which river runs through Paris?', o:['Thames','Seine','Danube','Rhine'], a:1 },
+  { c:'LITERATURE', q:'Who wrote "The Odyssey"?', o:['Virgil','Homer','Ovid','Sophocles'], a:1 },
+  { c:'GEOGRAPHY', q:'How many continents are there?', o:['5','6','7','8'], a:2 },
+  { c:'CULTURE', q:'The Mona Lisa was painted by?', o:['Raphael','Michelangelo','Leonardo da Vinci','Donatello'], a:2 },
+  { c:'SCIENCE', q:'Which gas do plants absorb to grow?', o:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'], a:2 },
+  { c:'GEOGRAPHY', q:'Capital of Japan?', o:['Kyoto','Tokyo','Osaka','Seoul'], a:1 },
+  { c:'SCIENCE', q:'Light travels at roughly…', o:['30,000 km/s','300,000 km/s','3,000 km/s','3 million km/s'], a:1 },
+  { c:'CULTURE', q:'Who painted the Sistine Chapel ceiling?', o:['Leonardo','Michelangelo','Raphael','Titian'], a:1 },
+  { c:'SCIENCE', q:'Largest planet in the solar system?', o:['Saturn','Jupiter','Neptune','Earth'], a:1 },
+  { c:'LITERATURE', q:'"War and Peace" was written by?', o:['Dostoevsky','Tolstoy','Chekhov','Gogol'], a:1 },
+  { c:'HISTORY', q:'The Great Pyramid stands at?', o:['Cairo','Giza','Luxor','Memphis'], a:1 },
+  { c:'SCIENCE', q:'In H₂O, the "2" counts atoms of?', o:['Oxygen','Hydrogen','Helium','Nitrogen'], a:1 },
+  { c:'SCIENCE', q:'Who developed the theory of relativity?', o:['Newton','Einstein','Bohr','Galileo'], a:1 },
+  { c:'GEOGRAPHY', q:'The Sahara desert is on which continent?', o:['Asia','Africa','Australia','South America'], a:1 },
+];
+
+// ── scene ──
+const canvas = document.getElementById('map');
+const renderer = new T.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene = new T.Scene(); scene.fog = new T.FogExp2(0x06070f, 0.012);
+const camera = new T.PerspectiveCamera(55, 1, 0.1, 300); camera.position.set(0, 26, 26);
+scene.add(new T.AmbientLight(0x2a3358, 1.1));
+const key = new T.DirectionalLight(0xffe6b0, 0.9); key.position.set(10,20,10); scene.add(key);
+const gl = new T.PointLight(0xe8b24b, 1.4, 80); gl.position.set(0,14,0); scene.add(gl);
+function resize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize',resize); resize();
+// ground + stars
+const ground = new T.Mesh(new T.CircleGeometry(60,48), new T.MeshStandardMaterial({color:0x0a1020, roughness:1}));
+ground.rotation.x=-Math.PI/2; scene.add(ground);
+(()=>{const N=900,p=new Float32Array(N*3);for(let i=0;i<N;i++){const r=60+Math.random()*100,t=Math.random()*6.28,ph=Math.acos(2*Math.random()-1);p[i*3]=r*Math.sin(ph)*Math.cos(t);p[i*3+1]=Math.abs(r*Math.cos(ph))+8;p[i*3+2]=r*Math.sin(ph)*Math.sin(t);}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));scene.add(new T.Points(g,new T.PointsMaterial({size:0.5,color:0xc9b47a,transparent:true,opacity:0.6})));})();
+// Kernel Castle (center)
+(()=>{ const g=new T.Group(), stone=new T.MeshStandardMaterial({color:0x7a6a45,roughness:0.8}), roof=new T.MeshStandardMaterial({color:0xe8b24b,emissive:0xe8b24b,emissiveIntensity:0.3,metalness:0.5});
+  const keep=new T.Mesh(new T.BoxGeometry(4,5,4),stone); keep.position.y=2.5; g.add(keep);
+  for(const [x,z] of [[-2.2,-2.2],[2.2,-2.2],[2.2,2.2],[-2.2,2.2]]){ const tw=new T.Mesh(new T.CylinderGeometry(0.8,0.9,7,8),stone); tw.position.set(x,3.5,z); const rf=new T.Mesh(new T.ConeGeometry(1.1,2,8),roof); rf.position.set(x,8,z); g.add(tw,rf); }
+  const sp=new T.Mesh(new T.ConeGeometry(1.4,4,10),roof); sp.position.y=7; g.add(sp); scene.add(g); })();
+
+// territory nodes
+const nodes=[];
+TERRITORIES.forEach((tt,i)=>{
+  const a=(i/TERRITORIES.length)*6.28, r=13+((i%3))*1.5, x=Math.cos(a)*r, z=Math.sin(a)*r;
+  const m=new T.Mesh(new T.IcosahedronGeometry(1.1,0), new T.MeshStandardMaterial({color:0x35507f, emissive:0x35d6ff, emissiveIntensity:0.3, roughness:0.3, metalness:0.4}));
+  m.position.set(x, 1.4, z); m.userData={i}; scene.add(m);
+  const pil=new T.Mesh(new T.CylinderGeometry(0.08,0.08,1.4,6), new T.MeshBasicMaterial({color:0x35d6ff,transparent:true,opacity:0.4})); pil.position.set(x,0.7,z); scene.add(pil);
+  const spoke=new T.BufferGeometry().setFromPoints([new T.Vector3(x*0.28,0.5,z*0.28),new T.Vector3(x*0.9,0.9,z*0.9)]);
+  scene.add(new T.Line(spoke, new T.LineBasicMaterial({color:0x2a4a6a,transparent:true,opacity:0.4})));
+  tt.mesh=m; tt.owned=false; nodes.push(m);
+});
+
+// ── game state ──
+const G = { zol:0, rep:0, owned:0, sel:-1, qi:0, state:'start', ledger:[] };
+const $=id=>document.getElementById(id);
+function ev(type, txt, cls){ G.ledger.unshift({type,txt,cls}); if(G.ledger.length>60)G.ledger.pop();
+  $('llist').innerHTML = G.ledger.map(e=>`<div class="ev ${e.cls||''}"><b>${e.type}</b> ${e.txt||''}</div>`).join(''); }
+function hud(){ $('zol').textContent=G.zol; $('rep').textContent=G.rep; $('owned').textContent=G.owned+' / 10'; }
+
+function begin(){ G.zol=0; G.rep=0; G.owned=0; G.sel=-1; G.ledger=[]; G.state='map';
+  TERRITORIES.forEach(t=>{ t.owned=false; t.mesh.material.color.setHex(0x35507f); t.mesh.material.emissive.setHex(0x35d6ff); t.mesh.material.emissiveIntensity=0.3; });
+  $('start').style.display='none'; $('victory').style.display='none'; $('terr').classList.remove('show');
+  ev('GAME_STARTED','House JM · Semper Fidelis'); hud(); }
+
+function select(i){ G.sel=i; const t=TERRITORIES[i];
+  $('t-name').textContent=t.name; $('t-cat').textContent = t.owned?'A claimed seat of your House.':'An unclaimed territory. Earn ZOL, then claim it.';
+  $('t-price').textContent=t.price+' ZOL'; $('t-prestige').textContent='+'+t.prestige+' rep';
+  $('t-owned').style.display = t.owned?'block':'none';
+  $('claim').disabled = t.owned || G.zol < t.price;
+  $('claim').textContent = t.owned?'Already yours':('🏰 Claim for '+t.price+' ZOL');
+  $('answer').style.display = t.owned?'none':'block';
+  $('terr').classList.add('show'); }
+
+function askQuestion(){
+  G.qi = Math.floor(Math.random()*QUESTIONS.length); const q=QUESTIONS[G.qi];
+  $('q-cat').textContent=q.c; $('q-text').textContent=q.q; $('q-fb').textContent=''; $('q-cont').style.display='none';
+  const opts=$('q-opts'); opts.innerHTML='';
+  q.o.forEach((o,idx)=>{ const b=document.createElement('div'); b.className='opt'; b.textContent=o;
+    b.onclick=()=>answerQ(idx,b); opts.appendChild(b); });
+  $('qcm').classList.add('show');
+}
+function answerQ(idx, el){
+  const q=QUESTIONS[G.qi]; const opts=[...$('q-opts').children]; opts.forEach(o=>o.onclick=null);
+  if(idx===q.a){ el.classList.add('correct'); G.zol+=REWARD; G.rep+=1;
+    $('q-fb').innerHTML='<span style="color:var(--green)">Correct. +'+REWARD+' ZOL</span>';
+    ev('QUESTION_ANSWERED_CORRECT', q.c, 'win'); ev('ZOL_EARNED','+'+REWARD);
+  } else { el.classList.add('wrong'); opts[q.a].classList.add('correct'); G.zol=Math.max(0,G.zol-PENALTY);
+    $('q-fb').innerHTML='<span style="color:var(--red)">Wrong. −'+PENALTY+' ZOL</span>';
+    ev('QUESTION_ANSWERED_WRONG', q.c, 'miss');
+  }
+  hud(); $('q-cont').style.display='inline-block';
+}
+$('q-cont').onclick=()=>{ $('qcm').classList.remove('show'); if(G.sel>=0) select(G.sel); };
+
+function claim(){ const t=TERRITORIES[G.sel]; if(t.owned || G.zol<t.price) return;
+  G.zol-=t.price; t.owned=true; G.owned++; G.rep+=t.prestige;
+  t.mesh.material.color.setHex(0xe8b24b); t.mesh.material.emissive.setHex(0xe8b24b); t.mesh.material.emissiveIntensity=0.9;
+  ev('TERRITORY_BOUGHT', t.name+' (−'+t.price+' ZOL)'); ev('REPUTATION_UPDATED','+'+t.prestige+' → '+G.rep);
+  hud(); select(G.sel);
+  if(G.owned>=WIN_TERR || G.rep>=WIN_REP){ win(); }
+}
+function win(){ G.state='win'; ev('GAME_WON','Semper Fidelis');
+  $('v-msg').innerHTML='House JM claims the map with <b style="color:var(--gold)">'+G.owned+' territories</b> and <b style="color:var(--gold)">'+G.rep+' reputation</b>.<br/>Knowledge became power. Memory became identity.';
+  $('victory').style.display='flex'; }
+
+$('answer').onclick=()=>{ if(G.sel>=0 && !TERRITORIES[G.sel].owned) askQuestion(); };
+$('claim').onclick=claim;
+$('start-btn').onclick=begin; $('restart-btn').onclick=begin;
+
+// picking
+const ray=new T.Raycaster(), m2=new T.Vector2();
+canvas.addEventListener('pointerdown', e=>{ if(G.state!=='map')return;
+  m2.set((e.clientX/innerWidth)*2-1, -(e.clientY/innerHeight)*2+1); ray.setFromCamera(m2,camera);
+  const hit=ray.intersectObjects(nodes,false)[0]; if(hit) select(hit.object.userData.i); });
+
+// loop
+const clock=new T.Clock();
+function loop(){ requestAnimationFrame(loop); const t=clock.getElapsedTime();
+  scene.rotation.y = t*0.03;
+  nodes.forEach((n,i)=>{ n.rotation.y=t*0.6; n.position.y=1.4+Math.sin(t*1.4+i)*0.15;
+    if(!TERRITORIES[i].owned) n.material.emissiveIntensity=0.3+Math.sin(t*1.8+i)*0.15; });
+  camera.lookAt(0,2,0); renderer.render(scene,camera); }
+loop(); hud();
+</script>
+</body>
+</html>
